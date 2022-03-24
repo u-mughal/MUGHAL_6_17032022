@@ -1,6 +1,7 @@
 /* Import des modules necessaires */
 const app = require("./app");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv").config({ encoding: "latin1" });
 
 /* Connection BDD mongoose */
 mongoose

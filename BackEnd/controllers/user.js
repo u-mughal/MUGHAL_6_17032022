@@ -1,6 +1,7 @@
 /* Import des modules necessaires */
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const dotenv = require("dotenv").config({ encoding: "latin1" });
 
 /* Controleur inscription */
 exports.signup = (req, res, next) => {
