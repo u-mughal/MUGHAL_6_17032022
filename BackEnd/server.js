@@ -1,11 +1,20 @@
-const http = require('http');
+/* Import des modules necessaires */
+const app = require("./app");
+const mongoose = require("mongoose");
 
-//Importation de l'app express
-const app = require('./app');
-
-//On set l'appli sur le port souhaité
-app.set('port', process.env.PORT || 3000);
-const server = http.createServer(app);
-
-
-server.listen(process.env.PORT || 3000);
+/* Connection BDD mongoose */
+mongoose
+    .connect(process.env.DBCONNECT, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    // Demarrage serveur
+    .then(() =>
+        app.listen(process.env.SERVER_PORT, () => {
+            console.log(
+                `This server is running on port ${process.env.SERVER_PORT}. Enjoy !`
+            );
+        })
+    )
+    // Arret du serveur si connection impossible
+    .catch(() => console.log("Server connection failed !"));
