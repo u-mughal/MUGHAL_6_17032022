@@ -1,10 +1,12 @@
 /* Import des modules necessaires */
-const express = require('express');
+const express = require("express");
 const userRoutes = require("./routes/user");
+
 
 /* Initialisation de l'API */
 const app = express();
 
+app.use(express.json());
 
 /* Mise en place reponses headers */
 app.use((req, res, next) => {
@@ -41,8 +43,5 @@ app.use(
 /* Mise en place du routage */
 app.use("/api/auth", userRoutes);
 
-/* Exporter l'app express pour qu'elle soit réutilisable depuis les autres fichiers */
+
 module.exports = app;
-
-
-

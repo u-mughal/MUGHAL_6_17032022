@@ -1,14 +1,10 @@
-/* Import des modules necessaires */
+// Importations
 const express = require("express");
 const router = express.Router();
 const userCtrl = require("../controllers/user");
 
-/* Routage User */
-router.post('/signup', function (req, res) {
-    userCtrl.signup
-});
-router.post('/login', function (req, res) {
-    userCtrl.login
-});
+// Les routes
+router.post("/signup", userCtrl.signup);
+router.post("/login", userCtrl.login);
 
 module.exports = router;
