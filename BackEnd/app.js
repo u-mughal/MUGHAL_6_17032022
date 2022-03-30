@@ -1,5 +1,6 @@
 /* Import des modules necessaires */
 const express = require("express");
+const sauceRoutes = require("./routes/sauce");
 const userRoutes = require("./routes/user");
 
 
@@ -41,7 +42,8 @@ app.use(
 );
 
 /* Mise en place du routage */
-app.use("/api/auth", userRoutes);
 
+app.use("/api/auth", userRoutes);
+app.use("/api/sauces", sauceRoutes);
 
 module.exports = app;
