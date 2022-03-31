@@ -2,10 +2,12 @@
 const express = require("express");
 const sauceRoutes = require("./routes/sauce");
 const userRoutes = require("./routes/user");
-
+const path = require("path");
 
 /* Initialisation de l'API */
 const app = express();
+
+app.use(express.urlencoded({ extended: true }))
 
 app.use(express.json());
 
@@ -43,6 +45,7 @@ app.use(
 
 /* Mise en place du routage */
 
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRoutes);
 app.use("/api/sauces", sauceRoutes);
 
