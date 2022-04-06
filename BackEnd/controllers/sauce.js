@@ -1,5 +1,6 @@
 /* Import des modules necessaires */
 const Sauce = require("../models/sauce");
+const fs = require("fs");
 
 /* Controleur creation sauce */
 exports.createSauce = (req, res, next) => {
@@ -56,7 +57,46 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 /* Controleur modification sauce */
-exports.modifySauce = (req, res, next) => { };
+exports.modifySauce = (req, res, next) => {
+    // Recuperation sauce avec ID
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+
+            const oldUrl = sauce.imageUrl;
+
+            const filename = sauce.imageUrl.split("/images/")[1];
+
+            if (req.file) {
+                fs.unlink(`images/${filename}`, () => {
+                    const sauceObject = {
+                        ...JSON.parse(req.body.sauce),
+                        imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename
+                            }`,
+                    };
+                    // MAJ de la sauce 
+                    Sauce.updateOne(
+                        { _id: req.params.id },
+                        { ...sauceObject, _id: req.params.id }
+                    )
+                        .then(() => res.status(200).json({ message: "Sauce mise à jour!" }))
+                        .catch((error) => res.status(400).json({ error }));
+                });
+
+            } else {
+                const newItem = req.body;
+                newItem.imageUrl = oldUrl;
+
+                Sauce.updateOne(
+                    { _id: req.params.id },
+                    { ...newItem, imageUrl: oldUrl, _id: req.params.id }
+                )
+                    .then(() => res.status(200).json({ message: "Sauce mise à jour!" }))
+                    .catch((error) => res.status(400).json({ error }));
+            }
+        })
+        .catch((error) => res.status(500).json({ error }));
+};
+
 
 /* Controleur suppression sauce */
 exports.deleteSauce = (req, res, next) => { };
