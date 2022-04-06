@@ -63,9 +63,9 @@ exports.modifySauce = (req, res, next) => {
         .then((sauce) => {
 
             const oldUrl = sauce.imageUrl;
-
+            // Recuperation nom de l'image
             const filename = sauce.imageUrl.split("/images/")[1];
-
+            // Suppression IMG dans le dossier local
             if (req.file) {
                 fs.unlink(`images/${filename}`, () => {
                     const sauceObject = {
@@ -99,7 +99,21 @@ exports.modifySauce = (req, res, next) => {
 
 
 /* Controleur suppression sauce */
-exports.deleteSauce = (req, res, next) => { };
+exports.deleteSauce = (req, res, next) => {
+    // Recup sauce avec id
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+            // Extraction du nom du fichier à supprimer
+            const filename = sauce.imageUrl.split("/images/")[1];
+            fs.unlink(`images/${filename}`, () => {
+                // Suppression sauce
+                Sauce.deleteOne({ _id: req.params.id })
+                    .then(() => res.status(200).json({ message: "Sauce supprimé !" }))
+                    .catch((error) => res.status(400).json({ error }));
+            });
+        })
+        .catch((error) => res.status(500).json({ error }));
+};
 
 /* Controleur like dislike */
 // Regle likeDislikeSauce : Like = 1 _ Dislike = -1 _ Pas de vote = 0
