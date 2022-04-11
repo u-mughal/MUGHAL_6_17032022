@@ -59,10 +59,10 @@ exports.getOneSauce = (req, res, next) => {
 
 /* Controleur modification sauce */
 exports.modifySauce = (req, res, next) => {
-    // Recuperation sauce avec ID
+    // Recup sauce avec id
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
-
+            // Enregistrement ancienne imgUrl (si nouvelle image dans modif)
             const oldUrl = sauce.imageUrl;
             // Recuperation nom de l'image
             const filename = sauce.imageUrl.split("/images/")[1];
@@ -74,7 +74,7 @@ exports.modifySauce = (req, res, next) => {
                         imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename
                             }`,
                     };
-                    // MAJ de la sauce 
+                    // MAJ de la sauce avec données modifiées
                     Sauce.updateOne(
                         { _id: req.params.id },
                         { ...sauceObject, _id: req.params.id }
@@ -82,11 +82,11 @@ exports.modifySauce = (req, res, next) => {
                         .then(() => res.status(200).json({ message: "Sauce mise à jour!" }))
                         .catch((error) => res.status(400).json({ error }));
                 });
-
+                // Modification sauce sans modif img
             } else {
                 const newItem = req.body;
                 newItem.imageUrl = oldUrl;
-
+                // MAJ de la sauce avec données modifiées
                 Sauce.updateOne(
                     { _id: req.params.id },
                     { ...newItem, imageUrl: oldUrl, _id: req.params.id }
