@@ -76,7 +76,7 @@ exports.modifySauce = (req, res, next) => {
                     };
                     // MAJ de la sauce avec données modifiées
                     Sauce.updateOne(
-                        { _id: req.params.id, userId: req.auth.userId },
+                        { _id: req.params.id, userId: req.body.userId },
                         { ...sauceObject, _id: req.params.id }
                     )
                         .then(() => res.status(200).json({ message: "Sauce mise à jour!" }))
@@ -88,7 +88,7 @@ exports.modifySauce = (req, res, next) => {
                 newItem.imageUrl = oldUrl;
                 // MAJ de la sauce avec données modifiées
                 Sauce.updateOne(
-                    { _id: req.params.id, userId: req.auth.userId },
+                    { _id: req.params.id, userId: req.body.userId },
                     { ...newItem, imageUrl: oldUrl, _id: req.params.id }
                 )
                     .then(() => res.status(200).json({ message: "Sauce mise à jour!" }))
@@ -102,7 +102,7 @@ exports.modifySauce = (req, res, next) => {
 /* Controleur suppression sauce */
 exports.deleteSauce = (req, res, next) => {
     // Recup sauce avec id
-    Sauce.findOne({ _id: req.params.id, userId: req.auth.userId })
+    Sauce.findOne({ _id: req.params.id, userId: req.body.userId })
         .then((sauce) => {
             // Empêcher n'importe qu'elle utilisateur de delete une sauce
             if (!sauce) {
